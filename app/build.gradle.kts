@@ -5,7 +5,7 @@ plugins {
 
 android {
     namespace = "com.androidlearn.geoquiz"
-    compileSdk = 33
+    compileSdk = 34
 
     defaultConfig {
         applicationId = "com.androidlearn.geoquiz"
