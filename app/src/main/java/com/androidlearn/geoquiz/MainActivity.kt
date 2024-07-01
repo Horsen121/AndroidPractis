@@ -6,6 +6,7 @@ import android.os.Bundle
 import android.widget.Toast
 import androidx.activity.ComponentActivity
 import androidx.activity.compose.setContent
+import androidx.activity.result.contract.ActivityResultContracts
 import androidx.activity.viewModels
 import androidx.compose.foundation.layout.Arrangement
 import androidx.compose.foundation.layout.Column
@@ -32,9 +33,16 @@ import com.androidlearn.geoquiz.ui.theme.GeoQuizTheme
 
 class MainActivity : ComponentActivity() {
     private val quizViewModel: QuizViewModel by viewModels()
+    private val mStartForResult = registerForActivityResult(ActivityResultContracts.StartActivityForResult()) {
+        if (it.resultCode != RESULT_OK) {
+            return@registerForActivityResult
+        }
+        quizViewModel.isCheater = it.data?.getBooleanExtra(EXTRA_ANSWER_SHOWN, false) ?: false
+    }
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
+
         setContent {
             GeoQuizTheme {
                 Surface(
@@ -48,6 +56,7 @@ class MainActivity : ComponentActivity() {
         }
     }
 
+
     @SuppressLint("ShowToast")
     @Composable
     fun ScreenPortrait() {
@@ -55,14 +64,14 @@ class MainActivity : ComponentActivity() {
             verticalArrangement = Arrangement.Center,
             horizontalAlignment = Alignment.CenterHorizontally
         ) {
-            Text(text = stringResource(id = quizViewModel.currentQuestionText))
+            Text(
+                text = stringResource(id = quizViewModel.currentQuestionText),
+                modifier = Modifier.padding(horizontal = 24.dp)
+            )
             Row {
                 TextButton(
                     enabled = quizViewModel.enabledButtons.value,
-                    onClick = {
-                        checkAnswer(quizViewModel.currentQuestionAnswer, true)
-                        quizViewModel.enabledButtons.value = false
-                    }
+                    onClick = { checkAnswer(quizViewModel.currentQuestionAnswer, true) }
                 ) {
                     Text(
                         text = stringResource(id = R.string.button_true),
@@ -71,16 +80,19 @@ class MainActivity : ComponentActivity() {
                 }
                 TextButton(
                     enabled = quizViewModel.enabledButtons.value,
-                    onClick = {
-                        checkAnswer(quizViewModel.currentQuestionAnswer, false)
-                        quizViewModel.enabledButtons.value = false
-                    }
+                    onClick = { checkAnswer(quizViewModel.currentQuestionAnswer, false) }
                 ) {
                     Text(
                         text = stringResource(id = R.string.button_false),
                         color = if (quizViewModel.enabledButtons.value) Color.Red else Color.Gray
                     )
                 }
+            }
+            Button(onClick = {
+                val intent = CheatActivity.newIntent(applicationContext, quizViewModel.currentQuestionAnswer)
+                mStartForResult.launch(intent)
+            }) {
+                Text(text = stringResource(id = R.string.button_cheat))
             }
             Row {
                 Button(onClick = {
@@ -119,15 +131,14 @@ class MainActivity : ComponentActivity() {
         ) {
             Text(
                 text = stringResource(id = quizViewModel.currentQuestionText),
-                modifier = Modifier.padding(top = 48.dp)
+                modifier = Modifier
+                    .padding(top = 48.dp)
+                    .padding(horizontal = 24.dp)
             )
             Row {
                 TextButton(
                     enabled = quizViewModel.enabledButtons.value,
-                    onClick = {
-                        checkAnswer(quizViewModel.currentQuestionAnswer, true)
-                        quizViewModel.enabledButtons.value = false
-                    }
+                    onClick = { checkAnswer(quizViewModel.currentQuestionAnswer, true) }
                 ) {
                     Text(
                         text = stringResource(id = R.string.button_true),
@@ -136,16 +147,19 @@ class MainActivity : ComponentActivity() {
                 }
                 TextButton(
                     enabled = quizViewModel.enabledButtons.value,
-                    onClick = {
-                        checkAnswer(quizViewModel.currentQuestionAnswer, false)
-                        quizViewModel.enabledButtons.value = false
-                    }
+                    onClick = { checkAnswer(quizViewModel.currentQuestionAnswer, false) }
                 ) {
                     Text(
                         text = stringResource(id = R.string.button_false),
                         color = if (quizViewModel.enabledButtons.value) Color.Red else Color.Gray
                     )
                 }
+            }
+            Button(onClick = {
+                val intent = CheatActivity.newIntent(this@MainActivity, quizViewModel.currentQuestionAnswer)
+                mStartForResult.launch(intent)
+            }) {
+                Text(text = stringResource(id = R.string.button_cheat))
             }
             Row(
                 horizontalArrangement = Arrangement.Absolute.SpaceBetween,
@@ -180,11 +194,17 @@ class MainActivity : ComponentActivity() {
 
     private fun checkAnswer(answer: Boolean, userAnswer: Boolean) {
         quizViewModel.setRes(userAnswer)
+        quizViewModel.enabledButtons.value = false
 
-        var messageResId = R.string.toast_incorrect
-        if (userAnswer == answer) messageResId = R.string.toast_correct
-
-        Toast.makeText(applicationContext, messageResId, Toast.LENGTH_SHORT).show()
+        val messageResId = when {
+            quizViewModel.isCheater -> {
+                quizViewModel.countCheating++
+                R.string.toast_judgment
+            }
+            userAnswer == answer -> R.string.toast_correct
+            else -> R.string.toast_incorrect
+        }
+        Toast.makeText(this@MainActivity, messageResId, Toast.LENGTH_SHORT).show()
     }
 
     private fun checkResults() {
@@ -193,7 +213,11 @@ class MainActivity : ComponentActivity() {
         for (i in 0 until quizViewModel.questionsSize) {
             if (results[i] == quizViewModel.question(i)) result++
         }
-        Toast.makeText(applicationContext, "$result / ${quizViewModel.questionsSize}", Toast.LENGTH_SHORT).show()
+        Toast.makeText(
+            this@MainActivity,
+            "$result / ${quizViewModel.questionsSize}\nCount of cheating: ${quizViewModel.countCheating}",
+            Toast.LENGTH_SHORT
+        ).show()
     }
 
 }

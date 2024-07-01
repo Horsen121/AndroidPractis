@@ -16,6 +16,8 @@ class QuizViewModel: ViewModel() {
     private var currentQuestion = mutableStateOf(questions[0])
     private val res = List(questionsSize) { false }.toMutableList()
     var enabledButtons = mutableStateOf(true)
+    var isCheater = false
+    var countCheating = 0
 
     val currentQuestionAnswer: Boolean
         get() = currentQuestion.value.answer
@@ -26,6 +28,8 @@ class QuizViewModel: ViewModel() {
     val results: List<Boolean>
         get() = res.toList()
     fun moveToPrevious(): Boolean {
+        isCheater = false
+
         currentQuestion.value = if (currentIndex > 0) {
             currentIndex -= 1
             questions[currentIndex]
@@ -33,6 +37,8 @@ class QuizViewModel: ViewModel() {
         return currentIndex != 0
     }
     fun moveToNext(): Boolean {
+        isCheater = false
+
         currentQuestion.value = if (currentIndex < questionsSize-1) {
             currentIndex += 1
             questions[currentIndex]
