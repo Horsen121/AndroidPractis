@@ -1,6 +1,7 @@
-package com.androidlearn.criminalintent.features.crime
+package com.androidlearn.criminalintent.features.crime.view.addEditCrime
 
 import android.content.Context
+import androidx.activity.compose.BackHandler
 import androidx.compose.foundation.layout.Column
 import androidx.compose.foundation.layout.Row
 import androidx.compose.foundation.layout.Spacer
@@ -30,6 +31,10 @@ fun CrimeScreen(
         factory = CrimeViewModel.Factory
     )
 ) {
+    BackHandler(viewModel.title.isNotEmpty()) {
+        viewModel.saveCrime()
+        navController.navigateUp()
+    }
     Column(
         modifier = Modifier
             .fillMaxSize()
@@ -38,7 +43,7 @@ fun CrimeScreen(
     ) {
         Text(text = stringResource(id = R.string.crime_title_label))
         TextField(
-            value = viewModel.title ?: "",
+            value = viewModel.title,
             onValueChange = { viewModel.title = it },
             placeholder = { Text(text = stringResource(R.string.crime_title_hint)) },
             modifier = Modifier.fillMaxWidth()

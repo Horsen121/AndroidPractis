@@ -14,8 +14,8 @@ import androidx.navigation.compose.NavHost
 import androidx.navigation.compose.composable
 import androidx.navigation.compose.rememberNavController
 import androidx.navigation.navArgument
-import com.androidlearn.criminalintent.features.crime.CrimeScreen
-import com.androidlearn.criminalintent.features.crimes.CrimesScreen
+import com.androidlearn.criminalintent.features.crime.view.addEditCrime.CrimeScreen
+import com.androidlearn.criminalintent.features.crime.view.crimes.CrimesScreen
 import com.androidlearn.criminalintent.ui.theme.CriminalIntentTheme
 import com.androidlearn.criminalintent.utils.Routes
 

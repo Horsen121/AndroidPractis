@@ -1,8 +1,9 @@
-package com.androidlearn.criminalintent.features.crimes
+package com.androidlearn.criminalintent.features.crime.view.crimes
 
 import android.content.Context
 import androidx.compose.foundation.layout.PaddingValues
 import androidx.compose.foundation.layout.fillMaxSize
+import androidx.compose.foundation.layout.padding
 import androidx.compose.foundation.lazy.LazyColumn
 import androidx.compose.foundation.lazy.items
 import androidx.compose.runtime.Composable
@@ -20,9 +21,11 @@ fun CrimesScreen(
 ) {
     LazyColumn(
         contentPadding = PaddingValues(16.dp),
-        modifier = Modifier.fillMaxSize()
+        modifier = Modifier
+            .fillMaxSize()
+            .padding(top = 24.dp)
     ) {
-        items(viewModel.crimes) { crime ->
+        items(viewModel.crimes.value) { crime ->
             CrimeCard(
                 crime = crime,
                 onClick = {
