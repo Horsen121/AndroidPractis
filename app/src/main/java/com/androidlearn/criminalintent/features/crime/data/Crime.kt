@@ -1,5 +1,6 @@
 package com.androidlearn.criminalintent.features.crime.data
 
+import androidx.room.ColumnInfo
 import androidx.room.Entity
 import androidx.room.PrimaryKey
 import androidx.room.TypeConverter
@@ -9,10 +10,17 @@ import java.util.Date
 data class Crime(
     @PrimaryKey
     val id: Int? = null,
-    val title: String,
+    @ColumnInfo(defaultValue = "")
+    val title: String = "",
     val date: Date = Date(),
-    var isSolved: Boolean = false
-)
+    @ColumnInfo(defaultValue = "")
+    val suspect: String = "",
+    val isSolved: Boolean = false
+) {
+    val photoFileName
+        get() = "IMG_$id.jpg"
+}
+
 
 class CrimeTypeConverters {
     @TypeConverter

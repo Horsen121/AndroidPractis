@@ -18,6 +18,7 @@ import com.androidlearn.criminalintent.features.crime.view.addEditCrime.CrimeScr
 import com.androidlearn.criminalintent.features.crime.view.crimes.CrimesScreen
 import com.androidlearn.criminalintent.ui.theme.CriminalIntentTheme
 import com.androidlearn.criminalintent.utils.Routes
+import com.androidlearn.criminalintent.utils.TopBar
 
 class MainActivity : ComponentActivity() {
     @SuppressLint("UnusedMaterial3ScaffoldPaddingParameter")
@@ -25,11 +26,13 @@ class MainActivity : ComponentActivity() {
         super.onCreate(savedInstanceState)
         enableEdgeToEdge()
         setContent {
-            CriminalIntentTheme {
-                Scaffold(modifier = Modifier.fillMaxSize()) {
-                    val viewModel: MainViewModel by lazy { MainViewModel(applicationContext) }
+            val viewModel: MainViewModel by lazy { MainViewModel(applicationContext) }
+            val navController = rememberNavController()
 
-                    val navController = rememberNavController()
+            CriminalIntentTheme {
+                Scaffold(
+                    modifier = Modifier.fillMaxSize()
+                ) {
                     NavHost(
                         navController = navController,
                         startDestination = Routes.CrimesScreen.route

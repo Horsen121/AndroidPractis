@@ -8,8 +8,6 @@ import com.androidlearn.criminalintent.features.crime.data.CrimeRepository
 import kotlinx.coroutines.Job
 import kotlinx.coroutines.flow.launchIn
 import kotlinx.coroutines.flow.onEach
-import kotlinx.coroutines.launch
-import kotlinx.coroutines.runBlocking
 
 class CrimesViewModel : ViewModel() {
     private val crimeRepository = CrimeRepository.get()
