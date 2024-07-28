@@ -1,0 +1,21 @@
+<?xml version="1.0" encoding="utf-8"?>
+<resources>
+    <string name="app_name">Корпоративный порядок</string>
+    <string name="crime_title_hint">Введите название</string>
+    <string name="crime_title_label">Название</string>
+    <string name="crime_details_label">Детали</string>
+    <string name="crime_details_hint">Введите детали</string>
+    <string name="crime_solved_label">Решено</string>
+    <string name="new_crime">Новое нарушение</string>
+    <string name="crimes_emptylist">Нарушений нет</string>
+    <string name="crime_report_solved">Случай разрешен</string>
+    <string name="crime_report_unsolved">Случай не разрешен</string>
+    <string name="crime_report_no_suspect">Нет подозреваемого</string>
+    <string name="crime_report_suspect">Подозреваемый - %s</string>
+    <string name="crime_report_subject">Отчёт о нарушении</string>
+    <string name="send_report">Отправить отчет в</string>
+    <string name="button_create">Создать</string>
+    <string name="button_save">Сохранить</string>
+    <string name="button_crime_suspect_text">Выбрать подозреваемого</string>
+    <string name="button_crime_report_text">Отправить отчет</string>
+</resources>

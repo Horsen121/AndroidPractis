@@ -7,7 +7,6 @@ import androidx.compose.runtime.getValue
 import androidx.compose.runtime.mutableStateOf
 import androidx.compose.runtime.setValue
 import androidx.core.content.FileProvider
-import androidx.core.net.toUri
 import androidx.lifecycle.SavedStateHandle
 import androidx.lifecycle.ViewModel
 import androidx.lifecycle.ViewModelProvider
@@ -46,7 +45,7 @@ class CrimeViewModel(
     var title by mutableStateOf("")
     var suspect by mutableStateOf("")
     var date by mutableStateOf(Date())
-    var photo by mutableStateOf<Uri?>(null)
+    var photo by mutableStateOf(false)
     var isSolved by mutableStateOf(false)
     private var crime: Crime = Crime()
 
@@ -58,7 +57,7 @@ class CrimeViewModel(
                          crime = it
                          title = it.title
                          suspect = it.suspect
-                         photo = getPhotoFile().toUri()
+                         photo = getPhotoFile().exists()
                          date = it.date
                          isSolved = it.isSolved
                     }

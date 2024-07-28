@@ -101,7 +101,7 @@ fun CrimeScreen(
     val getPhoto = rememberLauncherForActivityResult(
         ActivityResultContracts.TakePicture()
     ) { result ->
-        if (result) viewModel.photo = viewModel.getUri(context)
+        viewModel.photo = result
     }
 
 
@@ -122,7 +122,7 @@ fun CrimeScreen(
                     verticalArrangement = Arrangement.SpaceBetween,
                     modifier = Modifier.fillMaxWidth(0.4f)
                 ) {
-                    if (viewModel.photo != null) {
+                    if (viewModel.photo) {
                         Image(
                             bitmap = getScaledBitmap(viewModel.getPhotoFile().path, 400, 400),
                             contentDescription = null,
@@ -154,7 +154,7 @@ fun CrimeScreen(
             Spacer(modifier = Modifier.height(24.dp))
 
             Button(onClick = { openDialog.value = true }) {
-                Text(text = viewModel.date.toString())
+                Text(text = viewModel.date.toLocaleString())
             }
             Row(
                 verticalAlignment = Alignment.CenterVertically
