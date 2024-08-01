@@ -26,7 +26,7 @@ class PhotoView : ComponentActivity() {
         setContent {
             val uri = this.intent.getStringExtra("uri") ?: ""
             PhotoGalleryTheme {
-                Scaffold() {
+                Scaffold {
                     PhotoPage(applicationContext, uri)
                 }
             }
@@ -34,10 +34,9 @@ class PhotoView : ComponentActivity() {
     }
 
     companion object {
-        fun newIntent(context: Context): Intent { // , photoPageUri: Uri
+        fun newIntent(context: Context): Intent {
             return Intent(context, PhotoView::class.java).apply {
                 addFlags(Intent.FLAG_ACTIVITY_NEW_TASK)
-//                data = photoPageUri
             }
         }
     }
