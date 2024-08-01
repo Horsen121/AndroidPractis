@@ -114,7 +114,9 @@ class MyPhotoGallery : ComponentActivity() {
 
     companion object {
         fun newIntent(context: Context): Intent {
-            return Intent(context, MyPhotoGallery::class.java)
+            return Intent(context, MyPhotoGallery::class.java).apply {
+                addFlags(Intent.FLAG_ACTIVITY_NEW_TASK)
+            }
         }
     }
 
@@ -150,8 +152,12 @@ fun MainScreen() {
                     .fillMaxWidth()
                     .aspectRatio(1.5f)
                     .clickable {
-                        val intent = Intent(Intent.ACTION_VIEW, galleryItem.photoPageUri).apply {
-                            flags = Intent.FLAG_ACTIVITY_NEW_TASK
+                        // Open in Browser
+//                        val intent = Intent(Intent.ACTION_VIEW, galleryItem.photoPageUri).apply {
+//                            flags = Intent.FLAG_ACTIVITY_NEW_TASK
+//                        }
+                        val intent = PhotoView.newIntent(viewModel!!.getApplication<Application>().applicationContext).apply {
+                            putExtra("uri", galleryItem.photoPageUri.toString())
                         }
                         startActivity(viewModel!!.getApplication<Application>().applicationContext, intent, null)
                     }
